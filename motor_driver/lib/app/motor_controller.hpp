@@ -7,14 +7,15 @@ class MotorController
 {
 private:
     // モーターの設定
-    int16_t max_duty = 2047;    // モーターの最大出力
+    int16_t max_duty = 2000;    // モーターの最大出力
     uint8_t control_cycle = 10; // 制御周期[ms]
+    bool is_brake = true;       // ブレーキの状態
     // PWMの設定
     uint32_t pwm_frequency = 20000; // 20kHz
     uint8_t pwm_resolution = 11;    // 11bit
     uint8_t pwm_channel = 0;        // PWMチャンネル
     // 台形制御の設定
-    int16_t max_acceleration = 100; // 最大加速度
+    int16_t max_acceleration = 400; // 最大加速度
     int16_t prev_speed = 0;         // 前回の速度
     // PID制御の設定
     float p_gain = 0.0; // 比例ゲイン
@@ -27,8 +28,9 @@ private:
      * @param input_speed 台形制御前の速度
      * @return uint16_t 台形制御後の速度
      */
-    uint16_t trapezoidal_control(uint16_t input_speed);
+    int16_t trapezoidal_control(int16_t input_speed);
 
+    int16_t saturate_max_duty(int16_t duty);
     /**
      * @brief モーターをブレーキする
      * @param enable true: ブレーキをかける, false: ブレーキを解除する

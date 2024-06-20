@@ -14,7 +14,6 @@ void setup()
     can_data_manager.init();
     Ps3.begin("0c:8b:95:2a:c1:94");
     FastLED.addLeds<WS2812, pin_number::RGB_LED, GRB>(leds, 1);
-
     while (!Ps3.isConnected())
     {
         leds[0] = CRGB::Yellow;
@@ -37,8 +36,8 @@ void loop()
 {
     if (Ps3.isConnected())
     {
-        md_targets[0] = Ps3.data.analog.stick.ly;
-        md_targets[1] = Ps3.data.analog.stick.ry;
+        md_targets[0] = (int16_t)Ps3.data.analog.stick.ly * 7;
+        md_targets[1] = (int16_t)Ps3.data.analog.stick.ry * 7;
         for (uint8_t i = 0; i < MD_NUM; i++)
         {
             can_data_manager.sendMDTargets_1(i, md_targets[i]);

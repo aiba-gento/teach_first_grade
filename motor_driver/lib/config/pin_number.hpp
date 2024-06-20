@@ -14,7 +14,7 @@
 
 namespace md_pin
 {
-    static constexpr uint8_t CAN_TX = 32;
+    static constexpr uint8_t CAN_TX = 27;
     static constexpr uint8_t CAN_RX = 33;
     static constexpr uint8_t MOTOR_DISABLE = 25;
     static constexpr uint8_t MOTOR_BRAKE = 26;

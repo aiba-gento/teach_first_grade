@@ -2,7 +2,7 @@
 #include "motor_controller.hpp"
 #include "can_data_manager.hpp"
 
-uint8_t md_id = 0;
+uint8_t md_id = 1;
 bool initialized = false;
 int16_t target_speed = 0;
 MotorController motor_controller;

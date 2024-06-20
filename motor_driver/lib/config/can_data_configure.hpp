@@ -118,6 +118,24 @@ namespace can_config
     }
 }
 
+/**
+ * @brief CAN通信のIDをエンコード
+ *
+ * @param dir 通信方向
+ * @param dev 通信デバイス
+ * @param device_id デバイスID
+ * @param data_name データの種類
+ * @return uint16_t CAN ID
+ */
 uint16_t encodeCanID(uint8_t dir, uint8_t dev, uint8_t device_id, uint8_t data_name);
 
+/**
+ * @brief CAN通信のIDをデコード
+ *
+ * @param can_id CAN ID
+ * @param dir 通信方向
+ * @param dev 通信デバイス
+ * @param device_id デバイスID
+ * @param data_name データの種類
+ */
 void decodeCanID(uint16_t can_id, uint8_t *dir, uint8_t *dev, uint8_t *device_id, uint8_t *data_name);

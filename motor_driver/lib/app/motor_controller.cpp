@@ -43,6 +43,22 @@ void MotorController::run(int16_t speed)
     // 台形制御
     speed = trapezoidal_control(speed);
     // モーターの回転方向
+    if (speed == 0)
+    {
+        digitalWrite(md_pin::MOTOR_DIRECTION, LOW);
+        if (is_brake)
+        {
+            brake(true);
+        }
+        else
+        {
+            brake(false);
+        }
+    }
+    else
+    {
+        brake(false);
+    }
     if (speed < 0)
     {
         digitalWrite(md_pin::MOTOR_DIRECTION, LOW);
@@ -52,6 +68,7 @@ void MotorController::run(int16_t speed)
     {
         digitalWrite(md_pin::MOTOR_DIRECTION, HIGH);
     }
+    speed = saturate_max_duty(speed);
     // モーターの回転速度
     ledcWrite(pwm_channel, speed);
 }
@@ -80,7 +97,7 @@ void MotorController::brake(bool enable)
     }
 }
 
-uint16_t MotorController::trapezoidal_control(uint16_t input_speed)
+int16_t MotorController::trapezoidal_control(int16_t input_speed)
 {
     // 台形制御
     int16_t speed = input_speed;
@@ -97,9 +114,23 @@ uint16_t MotorController::trapezoidal_control(uint16_t input_speed)
     return speed;
 }
 
+int16_t MotorController::saturate_max_duty(int16_t duty)
+{
+    // 最大出力を制限
+    if (duty > max_duty)
+    {
+        return max_duty;
+    }
+    else if (duty < -max_duty)
+    {
+        return -max_duty;
+    }
+    return duty;
+}
+
 void MotorController::setParameters(md_mode_t mode)
 {
     max_acceleration = mode.values.max_acceleration * control_cycle;
     max_duty = mode.values.max_output;
-    brake(mode.flags.brake);
+    is_brake = mode.flags.brake;
 }

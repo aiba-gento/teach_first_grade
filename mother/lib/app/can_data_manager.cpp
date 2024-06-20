@@ -41,7 +41,7 @@ void CANDataManager::onReceive(int packetSize)
 void CANDataManager::sendMDInit(uint8_t md_id)
 {
     uint8_t data[can_config::dlc::md::init] = {0};
-    uint32_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::init);
+    uint16_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::init);
     CAN.beginPacket(can_id);
     CAN.write(data[0]);
     CAN.endPacket();
@@ -49,7 +49,7 @@ void CANDataManager::sendMDInit(uint8_t md_id)
 
 void CANDataManager::sendMDMode(uint8_t md_id, md_mode_t mode)
 {
-    uint32_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::mode);
+    uint16_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::mode);
     CAN.beginPacket(can_id);
     for (uint8_t i = 0; i < can_config::dlc::md::mode; i++)
     {
@@ -60,7 +60,7 @@ void CANDataManager::sendMDMode(uint8_t md_id, md_mode_t mode)
 
 void CANDataManager::sendMDTargets_1(uint8_t md_id, uint16_t target_1)
 {
-    uint32_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::targets);
+    uint16_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::targets);
     CAN.beginPacket(can_id);
     for (uint8_t i = 0; i < can_config::dlc::md::targets_1; i++)
     {
@@ -71,7 +71,7 @@ void CANDataManager::sendMDTargets_1(uint8_t md_id, uint16_t target_1)
 
 void CANDataManager::sendMDTargets_4(uint8_t md_id, uint16_t *targets)
 {
-    uint32_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::targets);
+    uint16_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::targets);
     CAN.beginPacket(can_id);
     for (uint8_t i = 0; i < can_config::dlc::md::targets_4 / can_config::dlc::md::targets_1; i++)
     {
