@@ -1,10 +1,19 @@
 #pragma once
-#include "pin_number.h"
+#include "pin_number.hpp"
 #include <stdbool.h>
 
 class MotorController
 {
 private:
+    // モーターの設定
+    int16_t max_duty = 2047; // モーターの最大出力
+    // PWMの設定
+    uint32_t pwm_frequency = 20000; // 20kHz
+    uint8_t pwm_resolution = 11;    // 11bit
+    uint8_t pwm_channel = 0;        // PWMチャンネル
+    // 台形制御の設定
+    int16_t max_acceleration = 100; // 最大加速度
+    int16_t prev_speed = 0;         // 前回の速度
 public:
     MotorController();
     ~MotorController();
