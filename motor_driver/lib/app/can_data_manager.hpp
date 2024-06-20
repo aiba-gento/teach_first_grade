@@ -33,7 +33,7 @@ private:
     // 静的コールバック関数
     static void staticOnReceive(int packetSize);
     static CANDataManager *instance_;
-    // 1時データ
+    // 一時データ
     uint16_t can_id;
     uint8_t dlc;
     uint8_t data[8];

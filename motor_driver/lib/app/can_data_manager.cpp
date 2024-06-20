@@ -99,7 +99,7 @@ void CANDataManager::onReceive(int packetSize)
         data[i] = CAN.read();
     }
     decodeCanID(can_id, &dir, &dev, &device_id, &data_name);
-    if (dev == can_config::dev::motor_driver && device_id == md_id)
+    if (dir == can_config::dir::to_slave && dev == can_config::dev::motor_driver && device_id == md_id)
     {
         clessifyData(data_name, data, dlc);
     }
