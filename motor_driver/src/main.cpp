@@ -11,9 +11,10 @@ md_mode_t md_mode;
 
 void setup()
 {
-    motor_controller.init();      // モーターの初期化
-    can_data_manager.init(md_id); // CAN通信の初期化
-    motor_controller.run(0);      // モーターを停止
+    motor_controller.init();        // モーターの初期化
+    can_data_manager.init(md_id);   // CAN通信の初期化
+    motor_controller.run(0);        // モーターを停止
+    motor_controller.disable(true); // モーターを無効化
 }
 
 void loop()
@@ -33,7 +34,8 @@ void loop()
     {
         if (can_data_manager.getMDInit()) // 初期化コマンドの取得
         {
-            initialized = true; // 初期化完了
+            motor_controller.disable(false); // モーターを有効化
+            initialized = true;              // 初期化完了
         }
     }
 }
