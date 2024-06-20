@@ -32,7 +32,7 @@ private:
     bool flag_md_d_gain;    // PID制御の微分ゲインのフラグ
     // 静的コールバック関数
     static void staticOnReceive(int packetSize);
-    static CANDataManager *instance;
+    static CANDataManager *instance_;
     // 1時データ
     uint16_t can_id;
     uint8_t dlc;

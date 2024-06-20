@@ -1,7 +1,10 @@
 #include "can_data_manager.hpp"
 
+CANDataManager *CANDataManager::instance_ = nullptr; // おまじない(chatgpt)
+
 CANDataManager::CANDataManager()
 {
+    instance_ = this;
 }
 
 CANDataManager::~CANDataManager()
@@ -11,7 +14,6 @@ CANDataManager::~CANDataManager()
 void CANDataManager::init(uint8_t md_id)
 {
     targets_packet_offset = md_id % 4 * can_config::dlc::md::targets_1; // 目標値のパケットオフセット
-    instance = this;                                                    // インスタンスの設定
     this->md_id = md_id;                                                // モータードライバのID
     // CAN通信の初期化
     CAN.setPins(md_pin::CAN_RX, md_pin::CAN_TX); // CAN通信のピン設定
@@ -78,7 +80,14 @@ bool CANDataManager::getMDPIDGain(float *p_gain, float *i_gain, float *d_gain)
 
 void CANDataManager::staticOnReceive(int packetSize)
 {
-    instance->onReceive(packetSize);
+    if (instance_ != nullptr)
+    {
+        instance_->onReceive(packetSize);
+    }
+    else
+    {
+        Serial.println("instance is null");
+    }
 }
 
 void CANDataManager::onReceive(int packetSize)
