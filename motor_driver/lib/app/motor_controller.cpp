@@ -40,6 +40,8 @@ void MotorController::init()
 
 void MotorController::run(int16_t speed)
 {
+    // 台形制御
+    speed = trapezoidal_control(speed);
     // モーターの回転方向
     if (speed < 0)
     {
@@ -93,4 +95,11 @@ uint16_t MotorController::trapezoidal_control(uint16_t input_speed)
     }
     prev_speed = speed; // 速度の更新
     return speed;
+}
+
+void MotorController::setParameters(md_mode_t mode)
+{
+    max_acceleration = mode.values.max_acceleration * control_cycle;
+    max_duty = mode.values.max_output;
+    brake(mode.flags.brake);
 }
