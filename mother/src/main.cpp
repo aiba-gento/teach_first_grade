@@ -36,8 +36,8 @@ void loop()
 {
     if (Ps3.isConnected())
     {
-        md_targets[0] = (int16_t)Ps3.data.analog.stick.ly * 7;
-        md_targets[1] = (int16_t)Ps3.data.analog.stick.ry * 7;
+        md_targets[0] = (int16_t)Ps3.data.analog.stick.ly * 20;
+        md_targets[1] = (int16_t)Ps3.data.analog.stick.ry * 20;
         for (uint8_t i = 0; i < MD_NUM; i++)
         {
             can_data_manager.sendMDTargets_1(i, md_targets[i]);
