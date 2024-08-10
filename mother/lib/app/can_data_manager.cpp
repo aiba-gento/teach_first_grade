@@ -47,6 +47,15 @@ void CANDataManager::sendMDInit(uint8_t md_id)
     CAN.endPacket();
 }
 
+void CANDataManager::sendYamaHexInit(uint8_t id)
+{
+    uint8_t data[can_config::dlc::common::init] = {0};
+    uint16_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::common, id, can_config::data_name::common::init);
+    CAN.beginPacket(can_id);
+    CAN.write(data[0]);
+    CAN.endPacket();
+}
+
 void CANDataManager::sendMDMode(uint8_t md_id, md_mode_t mode)
 {
     uint16_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::mode);
@@ -58,7 +67,7 @@ void CANDataManager::sendMDMode(uint8_t md_id, md_mode_t mode)
     CAN.endPacket();
 }
 
-void CANDataManager::sendMDTargets_1(uint8_t md_id, uint16_t target_1)
+void CANDataManager::sendMDTargets_1(uint8_t md_id, int16_t target_1)
 {
     uint16_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::targets);
     CAN.beginPacket(can_id);
@@ -69,15 +78,31 @@ void CANDataManager::sendMDTargets_1(uint8_t md_id, uint16_t target_1)
     CAN.endPacket();
 }
 
-void CANDataManager::sendMDTargets_4(uint8_t md_id, uint16_t *targets)
+void CANDataManager::sendMDTargets_4(uint8_t md_id, int16_t targets[4])
 {
+    uint16_t tx_data[4] = {0};
     uint16_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::motor_driver, md_id, can_config::data_name::md::targets);
     CAN.beginPacket(can_id);
     for (uint8_t i = 0; i < can_config::dlc::md::targets_4 / can_config::dlc::md::targets_1; i++)
     {
+        tx_data[i] = static_cast<uint16_t>(targets[i]);
         for (uint8_t j = 0; j < can_config::dlc::md::targets_1; j++)
         {
-            CAN.write((uint8_t)(targets[i] >> (8 * j)));
+            CAN.write((uint8_t)(tx_data[i] >> (8 * j)));
+        }
+    }
+    CAN.endPacket();
+}
+
+void CANDataManager::sendServoAngles(uint8_t servo_id, uint16_t angle[4])
+{
+    uint16_t can_id = encodeCanID(can_config::dir::to_slave, can_config::dev::servo_driver, servo_id, can_config::data_name::servo::targets_1_4);
+    CAN.beginPacket(can_id);
+    for (uint8_t j = 0; j < 4; j++)
+    {
+        for (uint8_t i = 0; i < 2; i++)
+        {
+            CAN.write((uint8_t)(angle[j] >> (8 * i)));
         }
     }
     CAN.endPacket();

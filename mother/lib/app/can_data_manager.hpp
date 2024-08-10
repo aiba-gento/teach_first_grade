@@ -44,7 +44,9 @@ public:
     void init();
 
     void sendMDInit(uint8_t md_id);
+    void sendYamaHexInit(uint8_t id);
     void sendMDMode(uint8_t md_id, md_mode_t mode);
-    void sendMDTargets_1(uint8_t md_id, uint16_t target_1);
-    void sendMDTargets_4(uint8_t md_id, uint16_t *targets);
+    void sendMDTargets_1(uint8_t md_id, int16_t target_1);
+    void sendMDTargets_4(uint8_t md_id, int16_t targets[4]);
+    void sendServoAngles(uint8_t servo_id, uint16_t angle[4]);
 };
