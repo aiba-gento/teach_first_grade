@@ -4,8 +4,7 @@
 #include "Ps3Controller.h"
 #include "FastLED.h"
 
-static constexpr uint8_t MD_NUM = 2;
-int16_t md_targets[MD_NUM] = {0};
+int16_t md_targets[4] = {0};
 CANDataManager can_data_manager;
 CRGB leds[1];
 int8_t servo_input[4] = {0, 0, 0, 0};
@@ -54,10 +53,7 @@ void setup()
         FastLED.show();
         delay(500);
     }
-    for (uint8_t i = 0; i < MD_NUM; i++)
-    {
-        can_data_manager.sendMDInit(i);
-    }
+    can_data_manager.sendYamaHexInit(0);
 
     leds[0] = CRGB::Blue;
     FastLED.show();
@@ -69,10 +65,9 @@ void loop()
     {
         md_targets[0] = (int16_t)Ps3.data.analog.stick.ly * 20;
         md_targets[1] = (int16_t)Ps3.data.analog.stick.ry * 20;
-        for (uint8_t i = 0; i < MD_NUM; i++)
-        {
-            can_data_manager.sendMDTargets_1(i, md_targets[i]);
-        }
+        md_targets[2] = 0;
+        md_targets[3] = 0;
+        can_data_manager.sendMDTargets_4(0, md_targets);
         servo_input[0] = (int8_t)Ps3.data.button.up - (int8_t)Ps3.data.button.down;
         servo_input[1] = (int8_t)Ps3.data.button.triangle - (int8_t)Ps3.data.button.cross;
         servo_input[2] = 0;
